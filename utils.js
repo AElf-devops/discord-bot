@@ -130,6 +130,10 @@ Note: Each address can only claim once.`);
             client.login(token).then(() => {
                 Sentry.captureMessage('success login', 'warning');
             })
+            .catch((err) => {
+                Sentry.captureException(err);
+                Sentry.flush(2000);
+            })
 
 
             break;
