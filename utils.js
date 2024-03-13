@@ -2,7 +2,7 @@ const TelegramApi = require('node-telegram-bot-api')
 const { Client, Collection, Events, GatewayIntentBits, userMention } = require('discord.js');
 const { UserTg } = require('./models');
 const getTxRs = require('./getTxResult');
-
+const Sentry = require('@sentry/node');
 const { faucetsToken } = require('./api');
 
 
@@ -12,6 +12,7 @@ const sendToken = async (address, callBack) => {
             address: address
         })
         const res = originRes.data;
+        
         if (res.code === '20000') {
             callBack({
                 status: 'pending'
@@ -109,10 +110,11 @@ const operateBotFromPlatForm = (platForm, token, clientId) => {
                 const address = content.split(prefix)[1].trim().replace(/^ELF_/, '').replace(/_.*$/, '');
                 // readyClient
                 const id = interaction.author.id;
+                Sentry.captureMessage(`[MessageCreate-init](${id}-${interaction.author.username}-${address})`, 'info');
                 const user = userMention(id);
-                console.log(`|${address}|`)
                 sendToken(address, (res) => {
                     const { status, message } = res;
+                    Sentry.captureMessage(`[MessageCreate-res](${status}-${message})`, 'info');
                     if (status === 'success') {
                         const { amount, symbol, address } = res.data;
                         interaction.reply(`Hi ${user},${amount} ${symbol} is sent to your wallet address ${address}, please check.
@@ -126,7 +128,7 @@ Note: Each address can only claim once.`);
 
             });
             client.login(token).then(() => {
-                console.log('success login')
+                Sentry.captureMessage('success login', 'warning');
             })
 
 
