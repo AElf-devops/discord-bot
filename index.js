@@ -18,6 +18,7 @@ Sentry.init({
 });
 
 try{
+    Sentry.captureMessage(`[index-init](${process.env.platForm}-${process.env.robotToken}-${process.env.clientId})`, 'info');
     operateBotFromPlatForm(process.env.platForm, process.env.robotToken, process.env.clientId)
 }catch(e){
     Sentry.captureException(e);
