@@ -120,7 +120,7 @@ const operateBotFromPlatForm = (platForm, token, clientId) => {
                         interaction.reply(`Hi ${user},${amount} ${symbol} is sent to your wallet address ${address}, please check.
 Note: Each address can only claim once.`);
                     } else if (status === 'error') {
-                        interaction.reply(`${user},${message} test peter`);
+                        interaction.reply(`${user},${message}`);
                     } else if (status === 'networkError') {
                         interaction.reply(`Hi ${user},the transaction to your wallet address ${address} failed due to network or server issues. Please try again.`);
                     }
