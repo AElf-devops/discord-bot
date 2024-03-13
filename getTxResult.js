@@ -1,4 +1,5 @@
 const AElf = require('aelf-sdk');
+const Sentry = require("@sentry/node");
 const { getTxResult } =require('@portkey/contracts');
 
 function getAElf(rpcUrl) {
@@ -23,7 +24,7 @@ async function getTxRs(TransactionId, chainId = 'tDVW', reGetCount = -280, notEx
   const rpcUrl = getRpcUrls()[chainId];
   const instance = getAElf(rpcUrl);
   const txResult = await getTxResult(instance, TransactionId, reGetCount, notExistedReGetCount);
-  console.log('TransactionId-----------',TransactionId, txResult)
+  Sentry.captureMessage(`[getTxRs-TransactionId](${TransactionId}-${txResult.Status})`, 'info');
   if (txResult.Status.toLowerCase() === 'mined') {
     return txResult;
   }
