@@ -1,7 +1,7 @@
 const axios = require('axios')
 
 const service = axios.create({
-    baseURL: 'https://schrodingerai.com/api',
+    baseURL: 'https://cat.schrodingerai.com/api',
     timeout: 20 * 10000
 })
 
